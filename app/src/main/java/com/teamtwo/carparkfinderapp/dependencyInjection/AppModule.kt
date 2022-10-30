@@ -10,6 +10,8 @@ import com.teamtwo.carparkfinderapp.data.repository.AvailabilityRepositoryImpl
 import com.teamtwo.carparkfinderapp.data.repository.CarparkRepositoryImpl
 import com.teamtwo.carparkfinderapp.domain.repository.AvailabilityRepository
 import com.teamtwo.carparkfinderapp.domain.repository.CarparkRepository
+import com.teamtwo.carparkfinderapp.domain.usecase.GetAvailability
+import com.teamtwo.carparkfinderapp.domain.usecase.GetBookmarkedCarparks
 import com.teamtwo.carparkfinderapp.domain.usecase.GetCarparks
 import com.teamtwo.carparkfinderapp.domain.usecase.SetBookmark
 import com.teamtwo.carparkfinderapp.util.Constants.BASE_URL
@@ -64,6 +66,7 @@ object AppModule {
         return CarparkRepositoryImpl(api, db.dao)
     }
 
+    // for the use cases in the domain layer
     @Singleton
     @Provides
     fun provideGetCarparksUseCase(
@@ -78,6 +81,22 @@ object AppModule {
         repository: CarparkRepository
     ): SetBookmark {
         return SetBookmark(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetBookmarkedCarparksUseCase(
+        repository: CarparkRepository
+    ): GetBookmarkedCarparks {
+        return GetBookmarkedCarparks(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetAvailabilityUseCase(
+        repository: AvailabilityRepository
+    ): GetAvailability {
+        return GetAvailability(repository)
     }
 
     /*

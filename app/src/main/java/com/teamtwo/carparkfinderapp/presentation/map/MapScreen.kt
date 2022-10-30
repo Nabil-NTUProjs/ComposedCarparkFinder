@@ -22,7 +22,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MarkerInfoWindowContent
+import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.teamtwo.carparkfinderapp.R
@@ -55,7 +55,6 @@ fun MapScreen(
     }
     // carpark list for displaying markers
     val cparkList by remember { viewModel.cparkList }
-
     val systemUiController = rememberSystemUiController()
 
     SideEffect {
@@ -97,7 +96,7 @@ fun MapScreen(
             ) {
                 // place all the markers from the corresponding list to the screen
                 cparkList.forEach {carpark ->
-                    MarkerInfoWindowContent(
+                    Marker(
                         state = MarkerState(
                             position = LatLng(carpark.lat, carpark.lng)
                         ),

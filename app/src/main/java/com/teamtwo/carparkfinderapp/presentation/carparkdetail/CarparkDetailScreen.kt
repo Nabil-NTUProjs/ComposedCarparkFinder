@@ -119,7 +119,7 @@ fun DrawDetailScreen(
                         if(fabStatus == 0) {
                             ExtendedFloatingActionButton(
                                 modifier = Modifier.padding(horizontal = 16.dp),
-                                icon = { Icon(Icons.Filled.BookmarkAdd,"") },
+                                icon = { Icon(Icons.Filled.BookmarkAdd,"", tint = MaterialTheme.colors.primaryVariant) },
                                 text = { Text("BOOKMARK", color = MaterialTheme.colors.primaryVariant) },
                                 elevation = FloatingActionButtonDefaults.elevation(5.dp),
                                 backgroundColor = Color.Yellow,
@@ -158,7 +158,7 @@ fun DrawDetailScreen(
                                 toggleAvailability = true
                             },
                             elevation = FloatingActionButtonDefaults.elevation(5.dp),
-                            backgroundColor = MaterialTheme.colors.primary,
+                            backgroundColor = MaterialTheme.colors.secondary,
                             text = {
                                 // Inner content including an icon and a text label
                                 Icon(
@@ -167,7 +167,7 @@ fun DrawDetailScreen(
                                     modifier = Modifier.size(ButtonDefaults.IconSize)
                                 )
                                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                                Text("AVAILABILITY", fontSize = 9.sp)
+                                Text("CHECK LOTS", fontSize = 12.sp)
                             }
                         )
                     }
@@ -240,7 +240,7 @@ fun AvailabilityDialog(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { toggleAvailability = false }
                 ) {
-                    Text("Dismiss")
+                    Text("Dismiss", color = Color.White)
                 }
             }
         }
