@@ -51,7 +51,7 @@ fun MapScreen(
     val singapore = mCurrentLocation?.let { LatLng(it.latitude, it.longitude) } ?: LatLng(1.35, 103.87)
 
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(singapore, 12f)
+        position = CameraPosition.fromLatLngZoom(singapore, 14f)
     }
     // carpark list for displaying markers
     val cparkList by remember { viewModel.cparkList }

@@ -7,7 +7,9 @@ import com.google.maps.android.compose.MapUiSettings
 
 data class MapState (
     val properties: MapProperties = MapProperties(
-        isMyLocationEnabled = true
+        isMyLocationEnabled = true,
+        isTrafficEnabled = true,
+        isBuildingEnabled = true
     ),
     val uiSettings: MapUiSettings = MapUiSettings(
         mapToolbarEnabled = true,
