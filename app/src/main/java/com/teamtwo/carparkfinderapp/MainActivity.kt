@@ -1,15 +1,16 @@
 package com.teamtwo.carparkfinderapp
 
 import android.Manifest
+import android.location.Location
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -22,6 +23,9 @@ import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.teamtwo.carparkfinderapp.presentation.carparkdetail.CarparkDetailScreen
 import com.teamtwo.carparkfinderapp.presentation.carparklist.CarparkListScreen
 import com.teamtwo.carparkfinderapp.presentation.map.MapScreen
@@ -44,6 +48,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MapsComposeGuideTheme {
 
+                var locationFromGps: Location? by remember { mutableStateOf(null) }
+
                 // request for location permissions
                 val permissionsState = rememberMultiplePermissionsState(
                     permissions = listOf(
@@ -51,6 +57,16 @@ class MainActivity : ComponentActivity() {
                         Manifest.permission.ACCESS_FINE_LOCATION,
                     )
                 )
+
+                val context = LocalContext.current
+                val fusedLocationProviderClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+                val locationCallback = remember {
+                    object : LocationCallback() {
+                        override fun onLocationResult(locationResult: LocationResult) {
+                            locationFromGps = locationResult.lastLocation
+                        }
+                    }
+                }
 
                 val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -126,7 +142,7 @@ class MainActivity : ComponentActivity() {
                     // specify all the composables that make up the app screens here
                     // this route leads to the default map screen, and is the starting route
                     composable("map_screen") {
-                        MapScreen(navController = navController, modifier = Modifier)
+                        MapScreen(navController = navController, modifier = Modifier, mCurrentLocation = locationFromGps)
                     }
                     // this route leads to the carpark list and search screen
                     composable("carpark_list_screen") {

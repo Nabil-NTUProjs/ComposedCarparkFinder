@@ -1,6 +1,7 @@
 package com.teamtwo.carparkfinderapp.presentation.map
 
 import android.annotation.SuppressLint
+import android.location.Location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.ManageSearch
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -20,7 +22,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerInfoWindowContent
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.teamtwo.carparkfinderapp.R
 import com.teamtwo.carparkfinderapp.domain.model.Carpark
@@ -39,12 +42,13 @@ fun MapScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: MapsViewModel = hiltNavGraphViewModel(),
+    mCurrentLocation: Location?,
 ) {
     val scaffoldState = rememberScaffoldState()
     val MapState by viewModel.mapState.collectAsState()
 
     // beginning state for the map
-    val singapore = LatLng(1.35, 103.87)
+    val singapore = mCurrentLocation?.let { LatLng(it.latitude, it.longitude) } ?: LatLng(1.35, 103.87)
 
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(singapore, 12f)
@@ -83,24 +87,33 @@ fun MapScreen(
 
         ) {
             GoogleMap(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().navigationBarsPadding(),
                 cameraPositionState = cameraPositionState,
                 // to ensure map properties reflect changes in state
                 properties = MapState.properties,
                 // prevent the controls from overlapping with the FAB
                 uiSettings = MapState.uiSettings,
+
             ) {
                 // place all the markers from the corresponding list to the screen
                 cparkList.forEach {carpark ->
-                    Marker(
-                        position = LatLng(
-                            carpark.lat,
-                            carpark.lng
+                    MarkerInfoWindowContent(
+                        state = MarkerState(
+                            position = LatLng(carpark.lat, carpark.lng)
                         ),
-                        title = carpark.address
+                        title = carpark.address,
+                        infoWindowAnchor = Offset(0.0f, 0.0f)
                     )
                 }
             }
+            /*
+            ScaleBar(
+                modifier = Modifier
+                    .padding(top = 5.dp, end = 15.dp)
+                    .align(Alignment.TopEnd),
+                cameraPositionState = cameraPositionState
+            )
+            */
 
             // open bookmark depending on state (after button onClick)
             if (MapState.isBookmarkView) {

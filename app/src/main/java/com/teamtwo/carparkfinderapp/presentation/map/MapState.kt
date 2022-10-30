@@ -11,6 +11,7 @@ data class MapState (
     ),
     val uiSettings: MapUiSettings = MapUiSettings(
         mapToolbarEnabled = true,
+        myLocationButtonEnabled = true,
         zoomControlsEnabled = false
     ),
     val isBookmarkView: Boolean = false

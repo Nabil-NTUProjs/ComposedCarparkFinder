@@ -24,7 +24,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerInfoWindowContent
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.teamtwo.carparkfinderapp.domain.model.Availability
 import com.teamtwo.carparkfinderapp.domain.model.Carpark
@@ -265,12 +266,10 @@ fun MapHeader(
             .fillMaxWidth(),
         cameraPositionState = cameraPositionState
     ) {
-        Marker(
-            position = pos,
+        MarkerInfoWindowContent(
+            state = MarkerState(position = pos) ,
             title = cpark.carParkNo,
-            snippet = "Long press for directions",
-            // function to navigate to this carpark
-            onInfoWindowLongClick = {}
+            snippet = "Touch bottom window for directions",
         )
     }
 }
