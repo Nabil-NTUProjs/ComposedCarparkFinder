@@ -101,7 +101,11 @@ fun MapScreen(
                             position = LatLng(carpark.lat, carpark.lng)
                         ),
                         title = carpark.address,
-                        infoWindowAnchor = Offset(0.0f, 0.0f)
+                        //icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
+                        infoWindowAnchor = Offset(0.0f, 0.0f),
+                        onInfoWindowLongClick = {
+                            navController.navigate("carpark_detail_screen/${carpark.id}")
+                        }
                     )
                 }
             }
@@ -195,7 +199,7 @@ private fun bookmarkDialog(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { viewModel.onEvent(MapEvent.ToggleBookmarkView) }
                 ) {
-                    Text("Dismiss")
+                    Text("Dismiss", color = Color.White)
                 }
             }
         }
