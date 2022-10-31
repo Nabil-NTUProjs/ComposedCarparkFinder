@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltNavGraphViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -96,28 +97,35 @@ fun MapScreen(
             ) {
                 // place all the markers from the corresponding list to the screen
                 cparkList.forEach {carpark ->
-                    Marker(
-                        state = MarkerState(
-                            position = LatLng(carpark.lat, carpark.lng)
-                        ),
-                        title = carpark.address,
-                        //icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
-                        infoWindowAnchor = Offset(0.0f, 0.0f),
-                        onInfoWindowLongClick = {
-                            navController.navigate("carpark_detail_screen/${carpark.id}")
-                        }
-                    )
+                    if (carpark.isBookmarked == 1) {
+                        Marker(
+                            state = MarkerState(
+                                position = LatLng(carpark.lat, carpark.lng)
+                            ),
+                            title = carpark.address,
+                            icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW),
+                            infoWindowAnchor = Offset(0.0f, 0.0f),
+                            onInfoWindowLongClick = {
+                                navController.navigate("carpark_detail_screen/${carpark.id-1}")
+                            }
+                        )
+                    }
+                    else if (carpark.isBookmarked == 0) {
+                        Marker(
+                            state = MarkerState(
+                                position = LatLng(carpark.lat, carpark.lng)
+                            ),
+                            title = carpark.address,
+                            infoWindowAnchor = Offset(0.0f, 0.0f),
+                            onInfoWindowLongClick = {
+                                navController.navigate("carpark_detail_screen/${carpark.id-1}")
+                            }
+                        )
+                    }
+
+
                 }
             }
-            /*
-            ScaleBar(
-                modifier = Modifier
-                    .padding(top = 5.dp, end = 15.dp)
-                    .align(Alignment.TopEnd),
-                cameraPositionState = cameraPositionState
-            )
-            */
-
             // open bookmark depending on state (after button onClick)
             if (MapState.isBookmarkView) {
                 viewModel.loadBookmarkedCarparkList()
