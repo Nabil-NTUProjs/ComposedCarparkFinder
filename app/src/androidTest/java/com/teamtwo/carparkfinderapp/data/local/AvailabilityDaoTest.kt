@@ -40,7 +40,7 @@ class AvailabilityDaoTest {
     // test the getAvailability functionality
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAvailabilityTest() = runTest {
+    fun getAvailabilityDAOTest() = runTest {
         // create and insert a test item
         val availabilityItem = AvailabilityEntity(
             carparkNumber = "U69",
